@@ -1,36 +1,19 @@
-package com.AI.EngineBoardGame;
-
-import api.AIPlayer;
-import api.GameEngine;
-import api.RuleEngine;
-import game.Board;
-import game.Cell;
-import game.Move;
-import game.Player;
-import org.junit.Before;
-import org.junit.jupiter.api.Test;
+package EngineBoardGame;
 
 import java.util.Scanner;
 
-public class GamePlayTest {
-
-    GameEngine gameEngine;
-    RuleEngine ruleEngine;
-    AIPlayer aiPlayer;
-    @Before
-    public void setUp(){
-        gameEngine = new GameEngine();
-        ruleEngine = new RuleEngine();
-        aiPlayer = new AIPlayer();
-    }
-    @Test
-    public void playGame(){
+public class Main {
+    public static void main(String[] args){
+        GameEngine gameEngine = new GameEngine();
+        RuleEngine ruleEngine = new RuleEngine();
         Board board = gameEngine.start("TicTacToe");
+
+        AIPlayer aiPlayer = new AIPlayer();
         Scanner scanner = new Scanner(System.in);
         int row;
         int col;
         while (!ruleEngine.getState(board).isOver()) {
-            row =
+            row = scanner.nextInt();
             col = scanner.nextInt();
             Player opponent = new Player("X"), computer = new Player("O");
             Move opponentMove = new Move(opponent, new Cell(row, col));
@@ -39,7 +22,5 @@ public class GamePlayTest {
             gameEngine.move(board, opponentMove);
         }
         System.out.println("Board result is " + ruleEngine.getState(board).isOver() + " Winner is " + ruleEngine.getState(board).getWinner());
-
     }
-
 }
