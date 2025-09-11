@@ -28,6 +28,7 @@ public class Main {
             Move sugeestMove = aiPlayer.suggestMove(board, computer);
             gameEngine.move(board, sugeestMove);
             gameEngine.move(board, opponentMove);
+            System.out.println(board);
         }
         System.out.println("Board result is " + ruleEngine.getState(board).isOver() + " Winner is " + ruleEngine.getState(board).getWinner());
     }
