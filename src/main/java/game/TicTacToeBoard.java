@@ -1,6 +1,6 @@
 package game;
 
-public class TicTacToeBoard extends Board {
+public class TicTacToeBoard implements Board {
     String[][] cells = new String[3][3];
 
     public String getCell(int rowIndex, int colIndex) {
@@ -29,5 +29,10 @@ public class TicTacToeBoard extends Board {
     @Override
     public void move(Move move) {
         setCell(move.getPlayer().playerSymbol, move.getCell());
+    }
+
+    @Override
+    public TicTacToeBoard copy(){
+
     }
 }
