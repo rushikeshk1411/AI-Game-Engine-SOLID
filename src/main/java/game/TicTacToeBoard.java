@@ -33,6 +33,11 @@ public class TicTacToeBoard implements Board {
 
     @Override
     public TicTacToeBoard copy(){
+        TicTacToeBoard ticTacToeBoard = new TicTacToeBoard();
 
+        for(int rowIndex=0; rowIndex<3; rowIndex++){
+            System.arraycopy(cells[rowIndex], 0,ticTacToeBoard.cells[rowIndex], 0, 3 );
+        }
+        return ticTacToeBoard;
     }
 }
