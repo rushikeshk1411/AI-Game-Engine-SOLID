@@ -7,9 +7,11 @@ import game.Board;
 import game.Cell;
 import game.Move;
 import game.Player;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args){
         GameEngine gameEngine = new GameEngine();
@@ -25,9 +27,9 @@ public class Main {
             col = scanner.nextInt();
             Player opponent = new Player("X"), computer = new Player("O");
             Move opponentMove = new Move(opponent, new Cell(row, col));
+            gameEngine.move(board, opponentMove);
             Move sugeestMove = aiPlayer.suggestMove(board, computer);
             gameEngine.move(board, sugeestMove);
-            gameEngine.move(board, opponentMove);
             System.out.println(board);
         }
         System.out.println("Board result is " + ruleEngine.getState(board).isOver() + " Winner is " + ruleEngine.getState(board).getWinner());

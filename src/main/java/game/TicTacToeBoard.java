@@ -8,9 +8,13 @@ public class TicTacToeBoard implements Board {
     }
 
     public void setCell(String symbol, Cell cell) {
-        cells[cell.rowIndex][cell.colIndex] = symbol;
+        if(cells[cell.rowIndex][cell.colIndex] == null)
+            cells[cell.rowIndex][cell.colIndex] = symbol;
+        else throw new IllegalStateException();
     }
-
+    public String getSymbol(int rowIndex, int colIndex){
+        return cells[rowIndex][colIndex];
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

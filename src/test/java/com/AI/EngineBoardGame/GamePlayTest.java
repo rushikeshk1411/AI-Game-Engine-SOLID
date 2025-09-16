@@ -3,43 +3,81 @@ package com.AI.EngineBoardGame;
 import api.AIPlayer;
 import api.GameEngine;
 import api.RuleEngine;
-import game.Board;
-import game.Cell;
-import game.Move;
-import game.Player;
-import org.junit.Before;
+import game.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Scanner;
-
+@SpringBootTest
 public class GamePlayTest {
 
     GameEngine gameEngine;
     RuleEngine ruleEngine;
     AIPlayer aiPlayer;
-    @Before
+    @BeforeEach
     public void setUp(){
         gameEngine = new GameEngine();
         ruleEngine = new RuleEngine();
         aiPlayer = new AIPlayer();
     }
-    @Test
-    public void playGame(){
-        Board board = gameEngine.start("TicTacToe");
-        Scanner scanner = new Scanner(System.in);
+    private void playGame(Board board, int[][] moves){
+
         int row;
         int col;
-        while (!ruleEngine.getState(board).isOver()) {
-            row =
-            col = scanner.nextInt();
+        int index = 0;
+        while (index < 3) {
+            row = moves[index][0];
+            col = moves[index][1];
             Player opponent = new Player("X"), computer = new Player("O");
             Move opponentMove = new Move(opponent, new Cell(row, col));
+            gameEngine.move(board, opponentMove);
+
             Move sugeestMove = aiPlayer.suggestMove(board, computer);
             gameEngine.move(board, sugeestMove);
-            gameEngine.move(board, opponentMove);
+
+            index++;
         }
         System.out.println("Board result is " + ruleEngine.getState(board).isOver() + " Winner is " + ruleEngine.getState(board).getWinner());
 
     }
+
+    @Test
+    public void rowWin(){
+        int[][] moves = new int[][]{{1, 0},{1, 1},{1, 2}};
+        Board board = gameEngine.start("TicTacToe");
+        playGame(board, moves);
+        assertTrue(ruleEngine.getState(board).isOver());
+        assertEquals("X", ruleEngine.getState(board).getWinner());
+    }
+
+    @Test
+    public void columnWin(){
+        int[][] moves = new int[][]{{0, 0},{1, 0},{2, 0}};
+        Board board = gameEngine.start("TicTacToe");
+        playGame(board, moves);
+        assertTrue(ruleEngine.getState(board).isOver());
+        assertEquals("X", ruleEngine.getState(board).getWinner());
+    }
+
+    @Test
+    public void firstDiagonalWin(){
+        int[][] moves = new int[][]{{0, 0},{1, 1},{2, 2}};
+        Board board = gameEngine.start("TicTacToe");
+        playGame(board, moves);
+        assertTrue(ruleEngine.getState(board).isOver());
+        assertEquals("X", ruleEngine.getState(board).getWinner());
+    }
+
+    @Test
+    public void lastDiagonalWin(){
+        int[][] moves = new int[][]{{0, 2},{1, 1},{2, 0}};
+        Board board = gameEngine.start("TicTacToe");
+        playGame(board, moves);
+        assertTrue(ruleEngine.getState(board).isOver());
+        assertEquals("X", ruleEngine.getState(board).getWinner());
+    }
+
 
 }

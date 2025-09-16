@@ -11,8 +11,9 @@ public class RuleEngine {
         String winner = "-";
         if (board instanceof TicTacToeBoard board1) {
             //if Row same
-            boolean rowComplete = true;
+            boolean rowComplete;
             for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+                rowComplete = true;
                 firstPlayer = board1.getCell(rowIndex, 0);
                 rowComplete = firstPlayer != null;
                 if(firstPlayer == null) continue;
@@ -27,8 +28,9 @@ public class RuleEngine {
             }
 
             //if Col same
-            boolean colComplete = true;
+            boolean colComplete;
             for (int colIndex = 0; colIndex < 3; colIndex++) {
+                colComplete = true;
                 firstPlayer = board1.getCell(0, colIndex);
                 colComplete = firstPlayer != null;
                 if(firstPlayer == null) continue;
@@ -48,7 +50,7 @@ public class RuleEngine {
             isStartDiagonalComplete = firstPlayer != null;
             if(firstPlayer != null) {
                 for (int index = 0; index < 3; index++) {
-                    if (!firstPlayer.equals(board1.getCell(index, index++))) {
+                    if (!firstPlayer.equals(board1.getCell(index, index))) {
                         isStartDiagonalComplete = false;
                         break;
                     }
