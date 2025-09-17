@@ -4,45 +4,41 @@ import game.Board;
 import game.GameState;
 import game.TicTacToeBoard;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 public class RuleEngine {
+    private GameState getGameState(BiFunction<Integer, Integer, String> next){
+        boolean isPossibleStreak;
+        for (int i = 0; i < 3; i++) {
+            isPossibleStreak = true;
+            for (int j = 0; j < 3; j++) {
+                if (next.apply(i, j) != null || !next.apply(i, 0).equals(next.apply(i, j))) {
+                    isPossibleStreak = false;
+                    break;
+                }
+            }
+            if (isPossibleStreak) return new GameState(true, next.apply(i, 0));
+
+        }
+        return null;
+    }
     public GameState getState(Board board) {
 
         String firstPlayer = "-";
         String winner = "-";
         if (board instanceof TicTacToeBoard board1) {
-            //if Row same
-            boolean rowComplete;
-            for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                rowComplete = true;
-                firstPlayer = board1.getCell(rowIndex, 0);
-                rowComplete = firstPlayer != null;
-                if(firstPlayer == null) continue;
-                for (int colIndex = 1; colIndex < 3; colIndex++) {
-                    if (!firstPlayer.equals(board1.getCell(rowIndex, colIndex))) {
-                        rowComplete = false;
-                        break;
-                    }
-                }
-                if (rowComplete) return new GameState(true, firstPlayer);
 
-            }
+            BiFunction<Integer, Integer, String> getNextRow = (i, j) -> board1.getSymbol(i, j);
+            BiFunction<Integer, Integer, String> getNextCol = (i, j) -> board1.getSymbol(j, i);
 
-            //if Col same
-            boolean colComplete;
-            for (int colIndex = 0; colIndex < 3; colIndex++) {
-                colComplete = true;
-                firstPlayer = board1.getCell(0, colIndex);
-                colComplete = firstPlayer != null;
-                if(firstPlayer == null) continue;
-                for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                    if (!firstPlayer.equals(board1.getCell(rowIndex, colIndex))) {
-                        colComplete = false;
-                        break;
-                    }
-                }
-                if (colComplete) return new GameState(true, firstPlayer);
+            //Row Win
+            GameState isRowWin = getGameState(getNextRow);
+            if(isRowWin != null) return isRowWin;
 
-            }
+            //Col Win
+            GameState isColWin = getGameState(getNextCol);
+            if(isColWin != null) return isColWin;
 
             //if startDiagonal
             boolean isStartDiagonalComplete = true;
