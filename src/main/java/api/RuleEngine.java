@@ -23,6 +23,17 @@ public class RuleEngine {
         }
         return null;
     }
+
+    private GameState getDiagonalGameState(BiFunction<Integer, Integer, String> next){
+        boolean strek = true;
+            for (int index = 0; index < 3; index++) {
+                if (!next.apply(0, 0).equals(next.apply(index, index))) {
+                    strek = false;
+                    break;
+                }
+            }
+
+    }
     public GameState getState(Board board) {
 
         String firstPlayer = "-";
@@ -40,18 +51,11 @@ public class RuleEngine {
             GameState isColWin = getGameState(getNextCol);
             if(isColWin != null) return isColWin;
 
+
+            BiFunction<Integer, Integer, String> getStartDiagonal = (i, j) -> board1.getSymbol(i, i);
+            BiFunction<Integer, Integer, String> getEndDiagonal = (i, j) -> board1.getSymbol(i, 3-i-1);
+
             //if startDiagonal
-            boolean isStartDiagonalComplete = true;
-            firstPlayer = board1.getCell(0, 0);
-            isStartDiagonalComplete = firstPlayer != null;
-            if(firstPlayer != null) {
-                for (int index = 0; index < 3; index++) {
-                    if (!firstPlayer.equals(board1.getCell(index, index))) {
-                        isStartDiagonalComplete = false;
-                        break;
-                    }
-                }
-            }
 
             if (isStartDiagonalComplete) return new GameState(true, firstPlayer);
 
