@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 public class RuleEngine {
     private GameState getGameState(BiFunction<Integer, Integer, String> next){
+        GameState gameState = new GameState(false, "-");
         boolean isPossibleStreak;
         for (int i = 0; i < 3; i++) {
             isPossibleStreak = true;
@@ -18,21 +19,25 @@ public class RuleEngine {
                     break;
                 }
             }
-            if (isPossibleStreak) return new GameState(true, next.apply(i, 0));
-
+            if (isPossibleStreak) gameState =  new GameState(true, next.apply(i, 0));
         }
-        return null;
+        return gameState;
     }
 
-    private GameState getDiagonalGameState(BiFunction<Integer, Integer, String> next){
+    // Now I am able to see the things
+
+
+    private GameState getDiagonalGameState(Function<Integer, String> next){
+        GameState gameState = new GameState(false, "-");
         boolean strek = true;
             for (int index = 0; index < 3; index++) {
-                if (!next.apply(0, 0).equals(next.apply(index, index))) {
+                if (!next.apply(0).equals(next.apply(index))) {
                     strek = false;
                     break;
                 }
             }
-
+            if(strek) gameState = new GameState(true, next.apply(0));
+        return gameState;
     }
     public GameState getState(Board board) {
 
@@ -45,33 +50,23 @@ public class RuleEngine {
 
             //Row Win
             GameState isRowWin = getGameState(getNextRow);
-            if(isRowWin != null) return isRowWin;
+            if(isRowWin.isOver()) return isRowWin;
 
             //Col Win
             GameState isColWin = getGameState(getNextCol);
-            if(isColWin != null) return isColWin;
+            if(isColWin.isOver()) return isColWin;
 
 
-            BiFunction<Integer, Integer, String> getStartDiagonal = (i, j) -> board1.getSymbol(i, i);
-            BiFunction<Integer, Integer, String> getEndDiagonal = (i, j) -> board1.getSymbol(i, 3-i-1);
+            Function<Integer, String> getStartDiagonal = (i) -> board1.getSymbol(i, i);
+            Function<Integer, String> getEndDiagonal = (i) -> board1.getSymbol(i,3-i-1);
 
             //if startDiagonal
-
-            if (isStartDiagonalComplete) return new GameState(true, firstPlayer);
+            GameState firstDigonalState = getDiagonalGameState(getStartDiagonal);
+            if(firstDigonalState.isOver()) return firstDigonalState;
 
             //if endDiagonal
-            boolean isEndDiagonal = true;
-            firstPlayer = board1.getCell(0, 2);
-            isEndDiagonal = firstPlayer != null;
-            if(firstPlayer != null) {
-                for (int index = 1; index < 3; index++) {
-                    if (!firstPlayer.equals(board1.getCell(index, 3 - index - 1))) {
-                        isEndDiagonal = false;
-                        break;
-                    }
-                }
-            }
-            if (isEndDiagonal) return new GameState(isEndDiagonal, firstPlayer);
+            GameState lastDiagonalState = getDiagonalGameState(getEndDiagonal);
+            if(lastDiagonalState.isOver()) return lastDiagonalState;
 
             int countOfFilledCells = 0;
 
