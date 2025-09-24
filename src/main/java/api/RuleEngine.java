@@ -25,8 +25,6 @@ public class RuleEngine {
     }
 
     // Now I am able to see the things
-
-
     private GameState getDiagonalGameState(Function<Integer, String> next){
         GameState gameState = new GameState(false, "-");
         boolean strek = true;
@@ -39,6 +37,7 @@ public class RuleEngine {
             if(strek) gameState = new GameState(true, next.apply(0));
         return gameState;
     }
+
     public GameState getState(Board board) {
 
         String firstPlayer = "-";
