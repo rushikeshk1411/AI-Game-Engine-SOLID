@@ -28,8 +28,8 @@ public class RuleEngine {
     private GameState getDiagonalGameState(Function<Integer, String> next){
         GameState gameState = new GameState(false, "-");
         boolean strek = true;
-            for (int index = 0; index < 3; index++) {
-                if (!next.apply(0).equals(next.apply(index))) {
+            for (int i = 0; i < 3; i++) {
+                if (!next.apply(0).equals(next.apply(i))) {
                     strek = false;
                     break;
                 }
