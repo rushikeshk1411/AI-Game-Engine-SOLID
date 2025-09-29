@@ -46,7 +46,7 @@ public class GamePlayTest {
     @Test
     public void rowWin(){
         int[][] firstPlayerMoves = new int[][]{{0, 0}, {0, 1}, {0, 2}};
-        int[][] secondPlayerMoves = new int[][]{{1, 0},{1, 1},{1, 2}};
+        int[][] secondPlayerMoves = new int[][]{{1, 0},{2, 1},{1, 2}};
         Board board = gameEngine.start("TicTacToe");
         playGame(board, firstPlayerMoves, secondPlayerMoves);
         assertTrue(ruleEngine.getState(board).isOver());
@@ -56,7 +56,7 @@ public class GamePlayTest {
     @Test
     public void columnWin(){
         int[][] firstPlayerMoves = new int[][]{{0, 0},{1, 0},{2, 0}};
-        int[][] secondPlayerMoves = new int[][] {{0, 1}, {1, 1}, {2, 1}};
+        int[][] secondPlayerMoves = new int[][] {{0, 1}, {1, 2}, {2, 1}};
         Board board = gameEngine.start("TicTacToe");
         playGame(board, firstPlayerMoves, secondPlayerMoves);
         assertTrue(ruleEngine.getState(board).isOver());
