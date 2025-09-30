@@ -16,6 +16,10 @@ public class RuleEngine {
             final int ii = i;
             Function<Integer, String> traversal = j -> next.apply(ii, j);
             gameState = traverse(traversal);
+            if(gameState.isOver()){
+                gameState = gameState;
+                break;
+            }
         }
         return gameState;
     }
@@ -25,7 +29,7 @@ public class RuleEngine {
         GameState gameState = new GameState(false, "-");
         boolean isPossibleStreak = true;
             for (int j = 0; j < 3; j++) {
-                if (next.apply(0) != null && !next.apply(0).equals(next.apply(j))) {
+                if ((next.apply(j) == null) || (next.apply(0) != null && !next.apply(0).equals(next.apply(j)))) {
                     isPossibleStreak = false;
                     break;
                 }
