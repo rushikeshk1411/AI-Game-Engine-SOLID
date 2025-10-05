@@ -82,7 +82,6 @@ public class GamePlayTest {
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
     }
-    //New requirement came here and we need to think about current code and what we can changed in the future
     @Test
     public void secondPlayerWin(){
         int[][] firstPlayerMoves = new int[][]{{1, 0}, {2, 0}, {2, 2}};

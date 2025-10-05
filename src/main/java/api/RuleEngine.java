@@ -1,13 +1,38 @@
 package api;
 
-import game.Board;
-import game.GameState;
-import game.TicTacToeBoard;
+import game.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class RuleEngine {
+
+    HashMap<String, ArrayList<Rule<TicTacToeBoard>>>  ruleMap = new HashMap<>();
+    public RuleEngine(){
+        ruleMap.put(TicTacToeBoard.class.getName(), new ArrayList<>());
+        ArrayList<Rule<TicTacToeBoard>> ruleList = ruleMap.get(TicTacToeBoard.class.getName());
+        ruleList.add(new Rule<>(board -> outerTraverse(board::getSymbol)));
+        ruleList.add(new Rule<>(board -> outerTraverse((j, i) -> board.getSymbol(i, j))));
+        ruleList.add(new Rule<>(board -> traverse(i -> board.getSymbol(i, i))));
+        ruleList.add(new Rule<>(board -> traverse(i -> board.getSymbol(i, 3-i-1))));
+        ruleList.add(new Rule<>(board -> {
+            int countOfFilledCells = 0;
+
+            for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+                for (int colIndex = 0; colIndex < 3; colIndex++) {
+                    if (board.getCell(rowIndex, colIndex) != null) {
+                        countOfFilledCells++;
+                    }
+                }
+            }
+
+            if (countOfFilledCells == 9) return new GameState(true, "-");
+            else return new GameState(false, "-");
+        }));
+    }
     private GameState outerTraverse(BiFunction<Integer, Integer, String> next){
         GameState gameState = new GameState(false, "-");
         boolean isPossibleStreak;
@@ -44,44 +69,62 @@ public class RuleEngine {
         String winner = "-";
         if (board instanceof TicTacToeBoard board1) {
 
-            BiFunction<Integer, Integer, String> getNextRow = (i, j) -> board1.getSymbol(i, j);
-            BiFunction<Integer, Integer, String> getNextCol = (i, j) -> board1.getSymbol(j, i);
-
-            //Row Win
-            GameState isRowWin = outerTraverse(getNextRow);
-            if(isRowWin.isOver()) return isRowWin;
-
-            //Col Win
-            GameState isColWin = outerTraverse(getNextCol);
-            if(isColWin.isOver()) return isColWin;
-
-
-            Function<Integer, String> getStartDiagonal = (i) -> board1.getSymbol(i, i);
-            Function<Integer, String> getEndDiagonal = (i) -> board1.getSymbol(i,3-i-1);
-
-            //if startDiagonal
-            GameState firstDigonalState = traverse(getStartDiagonal);
-            if(firstDigonalState.isOver()) return firstDigonalState;
-
-            //if endDiagonal
-            GameState lastDiagonalState = traverse(getEndDiagonal);
-            if(lastDiagonalState.isOver()) return lastDiagonalState;
-
-            int countOfFilledCells = 0;
-
-            for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                for (int colIndex = 0; colIndex < 3; colIndex++) {
-                    if (board1.getCell(rowIndex, colIndex) != null) {
-                        countOfFilledCells++;
-                    }
-                }
+            String key  = TicTacToeBoard.class.getName();
+            for(Rule<TicTacToeBoard> r : ruleMap.get(key)){
+                GameState gameState = r.condition.apply(board1);
+                if(gameState.isOver()) return gameState;
             }
-
-            if (countOfFilledCells == 9) return new GameState(true, "-");
-
-        } else {
-            return new GameState(false, "Error");
         }
         return new GameState(false, "-");
+    }
+
+    public GameInfo getInfo(Board board){
+        if(board instanceof TicTacToeBoard board1){
+            GameState gameState = getState(board);
+            String[] players = new String[]{"X", "0"};
+            for(int playerIndex=0; playerIndex<2; playerIndex++){
+                Player currPlayer = new Player(players[playerIndex]);
+
+                for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+                    for (int colIndex = 0; colIndex < 3; colIndex++) {
+                        Board boardCopy = board1.copy();
+                        boolean canStillWin = false;
+                        Cell cell = new Cell(rowIndex, colIndex);
+                        board1.move(new Move(currPlayer, cell));
+                        for(int i=0; i<3; i++){
+                            for(int j=0; j<3; j++){
+                                boardCopy.move(new Move(currPlayer.flip(), new Cell(i, j)));
+
+                                if(getState(boardCopy).isOver() && getState(boardCopy).getWinner().equals(currPlayer.flip().symbol())){
+                                    canStillWin = true;
+                                    break;
+                                }
+                            }
+                            if(canStillWin) break;
+                        }
+                        if(!canStillWin){
+                            return new GameInfoBuilder()
+                                    .isOver(getState((boardCopy)).isOver())
+                                    .winner(getState(boardCopy).getWinner())
+                                    .hasFork(true)
+                                    .player(currPlayer.flip())
+                                    .build();
+                        }
+                    }
+
+                }
+
+            }
+
+            return new GameInfoBuilder()
+                    .isOver(getState((board1)).isOver())
+                    .winner(getState(board1).getWinner())
+                    .hasFork(true)
+                    .player(null)
+                    .build();
+
+        }else{
+            throw new IllegalArgumentException();
+        }
     }
 }
