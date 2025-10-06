@@ -111,9 +111,7 @@ public class RuleEngine {
                                     .build();
                         }
                     }
-
                 }
-
             }
 
             return new GameInfoBuilder()
