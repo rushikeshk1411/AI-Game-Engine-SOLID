@@ -10,10 +10,10 @@ import java.util.function.Function;
 
 public class RuleEngine {
 
-    HashMap<String, ArrayList<Rule<TicTacToeBoard>>>  ruleMap = new HashMap<>();
+    HashMap<String, RuleSet<TicTacToeBoard>>  ruleMap = new HashMap<>();
     public RuleEngine(){
-        ruleMap.put(TicTacToeBoard.class.getName(), new ArrayList<>());
-        ArrayList<Rule<TicTacToeBoard>> ruleList = ruleMap.get(TicTacToeBoard.class.getName());
+        ruleMap.put(TicTacToeBoard.class.getName(), new RuleSet<TicTacToeBoard>());
+        RuleSet<TicTacToeBoard> ruleList = ruleMap.get(TicTacToeBoard.class.getName());
         ruleList.add(new Rule<>(board -> outerTraverse(board::getSymbol)));
         ruleList.add(new Rule<>(board -> outerTraverse((j, i) -> board.getSymbol(i, j))));
         ruleList.add(new Rule<>(board -> traverse(i -> board.getSymbol(i, i))));
