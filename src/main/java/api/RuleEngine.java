@@ -10,57 +10,10 @@ import java.util.function.Function;
 
 public class RuleEngine {
 
-    HashMap<String, RuleSet<TicTacToeBoard>>  ruleMap = new HashMap<>();
+    HashMap<String, RuleSet>  ruleMap = new HashMap<>();
     public RuleEngine(){
-        ruleMap.put(TicTacToeBoard.class.getName(), new RuleSet<TicTacToeBoard>());
-        RuleSet<TicTacToeBoard> ruleList = ruleMap.get(TicTacToeBoard.class.getName());
-        ruleList.add(new Rule<>(board -> outerTraverse(board::getSymbol)));
-        ruleList.add(new Rule<>(board -> outerTraverse((j, i) -> board.getSymbol(i, j))));
-        ruleList.add(new Rule<>(board -> traverse(i -> board.getSymbol(i, i))));
-        ruleList.add(new Rule<>(board -> traverse(i -> board.getSymbol(i, 3-i-1))));
-        ruleList.add(new Rule<>(board -> {
-            int countOfFilledCells = 0;
 
-            for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                for (int colIndex = 0; colIndex < 3; colIndex++) {
-                    if (board.getCell(rowIndex, colIndex) != null) {
-                        countOfFilledCells++;
-                    }
-                }
-            }
-
-            if (countOfFilledCells == 9) return new GameState(true, "-");
-            else return new GameState(false, "-");
-        }));
-    }
-    private GameState outerTraverse(BiFunction<Integer, Integer, String> next){
-        GameState gameState = new GameState(false, "-");
-        boolean isPossibleStreak;
-        for (int i = 0; i < 3; i++) {
-            isPossibleStreak = true;
-            final int ii = i;
-            Function<Integer, String> traversal = j -> next.apply(ii, j);
-            gameState = traverse(traversal);
-            if(gameState.isOver()){
-                gameState = gameState;
-                break;
-            }
-        }
-        return gameState;
-    }
-
-    // Now I am able to see the things
-    private GameState traverse(Function<Integer, String> next){
-        GameState gameState = new GameState(false, "-");
-        boolean isPossibleStreak = true;
-            for (int j = 0; j < 3; j++) {
-                if ((next.apply(j) == null) || (next.apply(0) != null && !next.apply(0).equals(next.apply(j)))) {
-                    isPossibleStreak = false;
-                    break;
-                }
-            }
-            if(isPossibleStreak) gameState = new GameState(true, next.apply(0));
-        return gameState;
+        TicTacToeBoard.getRules();
     }
 
     public GameState getState(Board board) {
@@ -70,7 +23,7 @@ public class RuleEngine {
         if (board instanceof TicTacToeBoard board1) {
 
             String key  = TicTacToeBoard.class.getName();
-            for(Rule<TicTacToeBoard> r : ruleMap.get(key)){
+            for(Rule r : ruleMap.get(key)){
                 GameState gameState = r.condition.apply(board1);
                 if(gameState.isOver()) return gameState;
             }

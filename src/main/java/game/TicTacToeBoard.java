@@ -1,5 +1,8 @@
 package game;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 public class TicTacToeBoard implements Board {
     String[][] cells = new String[3][3];
 
@@ -15,6 +18,61 @@ public class TicTacToeBoard implements Board {
     public String getSymbol(int rowIndex, int colIndex){
         return cells[rowIndex][colIndex];
     }
+
+    public static RuleSet getRule(){
+        RuleSet ruleSet = new RuleSet();
+        ruleSet.add(new Rule(board -> outerTraverse(board::getSymbol)));
+        ruleSet.add(new Rule(board -> outerTraverse((j, i) -> board.getSymbol(i, j))));
+        ruleSet.add(new Rule(board -> traverse(i -> board.getSymbol(i, i))));
+        ruleSet.add(new Rule(board -> traverse(i -> board.getSymbol(i, 3-i-1))));
+        ruleSet.add(new Rule(board -> {
+            int countOfFilledCells = 0;
+
+            for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+                for (int colIndex = 0; colIndex < 3; colIndex++) {
+                    if (board.getCell(rowIndex, colIndex) != null) {
+                        countOfFilledCells++;
+                    }
+                }
+            }
+
+            if (countOfFilledCells == 9) return new GameState(true, "-");
+            else return new GameState(false, "-");
+        }));
+
+        return ruleSet;
+    }
+
+    private static GameState outerTraverse(BiFunction<Integer, Integer, String> next){
+        GameState gameState = new GameState(false, "-");
+        boolean isPossibleStreak;
+        for (int i = 0; i < 3; i++) {
+            isPossibleStreak = true;
+            final int ii = i;
+            Function<Integer, String> traversal = j -> next.apply(ii, j);
+            gameState = traverse(traversal);
+            if(gameState.isOver()){
+                gameState = gameState;
+                break;
+            }
+        }
+        return gameState;
+    }
+
+    // Now I am able to see the things
+    private static GameState traverse(Function<Integer, String> next){
+        GameState gameState = new GameState(false, "-");
+        boolean isPossibleStreak = true;
+        for (int j = 0; j < 3; j++) {
+            if ((next.apply(j) == null) || (next.apply(0) != null && !next.apply(0).equals(next.apply(j)))) {
+                isPossibleStreak = false;
+                break;
+            }
+        }
+        if(isPossibleStreak) gameState = new GameState(true, next.apply(0));
+        return gameState;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
