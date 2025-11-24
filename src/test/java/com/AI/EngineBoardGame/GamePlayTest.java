@@ -3,6 +3,7 @@ package com.AI.EngineBoardGame;
 import api.AIPlayer;
 import api.GameEngine;
 import api.RuleEngine;
+import board.Board;
 import game.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,6 +83,7 @@ public class GamePlayTest {
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
     }
+
     @Test
     public void secondPlayerWin(){
         int[][] firstPlayerMoves = new int[][]{{1, 0}, {2, 0}, {2, 2}};
@@ -91,6 +93,5 @@ public class GamePlayTest {
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("O", ruleEngine.getState(board).getWinner());
     }
-
 
 }

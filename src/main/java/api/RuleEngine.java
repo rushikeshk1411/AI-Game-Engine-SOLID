@@ -1,19 +1,15 @@
 package api;
 
+import board.Board;
 import game.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class RuleEngine {
 
     HashMap<String, RuleSet>  ruleMap = new HashMap<>();
     public RuleEngine(){
-
-        TicTacToeBoard.getRules();
+        ruleMap.put(TicTacToeBoard.class.getName(), TicTacToeBoard.getRules());
     }
 
     public GameState getState(Board board) {
@@ -23,6 +19,7 @@ public class RuleEngine {
         if (board instanceof TicTacToeBoard board1) {
 
             String key  = TicTacToeBoard.class.getName();
+
             for(Rule r : ruleMap.get(key)){
                 GameState gameState = r.condition.apply(board1);
                 if(gameState.isOver()) return gameState;
@@ -61,6 +58,7 @@ public class RuleEngine {
                                     .winner(getState(boardCopy).getWinner())
                                     .hasFork(true)
                                     .player(currPlayer.flip())
+                                    .forkCell(cell)
                                     .build();
                         }
                     }

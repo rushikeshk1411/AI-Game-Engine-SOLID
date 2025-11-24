@@ -1,6 +1,7 @@
 package api;
 
 
+import board.Board;
 import game.*;
 
 public class GameEngine {

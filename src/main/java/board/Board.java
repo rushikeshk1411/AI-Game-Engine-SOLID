@@ -1,4 +1,6 @@
-package game;
+package board;
+
+import game.Move;
 
 public interface Board{
 

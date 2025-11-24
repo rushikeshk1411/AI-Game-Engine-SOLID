@@ -1,9 +1,11 @@
 package game;
 
+import board.CellBoard;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class TicTacToeBoard implements Board {
+public class TicTacToeBoard implements CellBoard {
     String[][] cells = new String[3][3];
 
     public String getCell(int rowIndex, int colIndex) {
@@ -19,7 +21,7 @@ public class TicTacToeBoard implements Board {
         return cells[rowIndex][colIndex];
     }
 
-    public static RuleSet getRule(){
+    public static RuleSet getRules(){
         RuleSet ruleSet = new RuleSet();
         ruleSet.add(new Rule(board -> outerTraverse(board::getSymbol)));
         ruleSet.add(new Rule(board -> outerTraverse((j, i) -> board.getSymbol(i, j))));
@@ -30,7 +32,7 @@ public class TicTacToeBoard implements Board {
 
             for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
                 for (int colIndex = 0; colIndex < 3; colIndex++) {
-                    if (board.getCell(rowIndex, colIndex) != null) {
+                    if (board.getSymbol(rowIndex, colIndex) != null) {
                         countOfFilledCells++;
                     }
                 }

@@ -1,11 +1,13 @@
 package game;
 
+import board.CellBoard;
+
 import java.util.function.Function;
 
 public class Rule {
-    public Function<Board, GameState> condition;
+    public Function<CellBoard, GameState> condition;
 
-    public Rule(Function<Board, GameState> ruleState){
+    public Rule(Function<CellBoard, GameState> ruleState){
         this.condition = ruleState;
     }
 }

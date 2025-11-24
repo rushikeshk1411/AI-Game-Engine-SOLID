@@ -3,7 +3,7 @@ package com.AI.EngineBoardGame;
 import api.AIPlayer;
 import api.GameEngine;
 import api.RuleEngine;
-import game.Board;
+import board.Board;
 import game.Cell;
 import game.Move;
 import game.Player;
