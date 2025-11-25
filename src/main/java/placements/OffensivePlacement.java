@@ -36,9 +36,8 @@ public class OffensivePlacement implements Placements {
         for(int rowIndex=0; rowIndex<3; rowIndex++){
             for(int colIndex=0; colIndex<3; colIndex++){
                 if(board.getSymbol(rowIndex, colIndex) == null) {
-                    TicTacToeBoard boardcopy = board.copy();
                     Move move = new Move(player, new Cell(rowIndex, colIndex));
-                    boardcopy.move(move);
+                    TicTacToeBoard boardcopy = board.move(move);
 
                     if (ruleEngine.getState(boardcopy).isOver()) {
                         return move.getCell();

@@ -1,12 +1,17 @@
 package game;
 
+import board.Board;
 import board.CellBoard;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class TicTacToeBoard implements CellBoard {
     String[][] cells = new String[3][3];
+
+    History history = new History();
 
     public String getCell(int rowIndex, int colIndex) {
         return cells[rowIndex][colIndex];
@@ -91,8 +96,11 @@ public class TicTacToeBoard implements CellBoard {
     }
 
     @Override
-    public void move(Move move) {
-        setCell(move.getPlayer().playerSymbol, move.getCell());
+    public TicTacToeBoard move(Move move) {
+        TicTacToeBoard board = copy();
+        history.add(this);
+        board.setCell(move.getPlayer().playerSymbol, move.getCell());
+        return board;
     }
 
     @Override
@@ -103,5 +111,27 @@ public class TicTacToeBoard implements CellBoard {
             System.arraycopy(cells[rowIndex], 0,ticTacToeBoard.cells[rowIndex], 0, 3 );
         }
         return ticTacToeBoard;
+    }
+}
+
+class History{
+    List<Board> boards = new ArrayList<>();
+
+    public void add(Board board) {
+        boards.add(boards.size()+ 1, board);
+    }
+
+    public Board getBoardAtMove(int moveIndex){
+        for(int i = 0; i< boards.size()- moveIndex + 1; i++){
+            boards.remove(boards.size()-1);
+        }
+        return boards.get(moveIndex);
+    }
+
+    public Board undoMove(){
+        if(boards.isEmpty()){
+            throw new IllegalStateException();
+        }
+        return boards.get(boards.size());
     }
 }

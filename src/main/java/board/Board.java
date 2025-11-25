@@ -4,7 +4,7 @@ import game.Move;
 
 public interface Board{
 
-	public abstract void move(Move move);
+	Board move(Move move);
 
-	public abstract Board copy();
+	Board copy();
 }
