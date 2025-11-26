@@ -1,6 +1,5 @@
 package game;
 
-import board.Board;
 import board.CellBoard;
 
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public class TicTacToeBoard implements CellBoard {
     @Override
     public TicTacToeBoard move(Move move) {
         TicTacToeBoard board = copy();
-        history.add(this);
+        history.add(getRepresentation(board));
         board.setCell(move.getPlayer().playerSymbol, move.getCell());
         return board;
     }
@@ -110,28 +109,45 @@ public class TicTacToeBoard implements CellBoard {
         for(int rowIndex=0; rowIndex<3; rowIndex++){
             System.arraycopy(cells[rowIndex], 0,ticTacToeBoard.cells[rowIndex], 0, 3 );
         }
+
+        ticTacToeBoard.history = this.history;
         return ticTacToeBoard;
+
+    }
+
+    private Representation getRepresentation(TicTacToeBoard board){
+        return new Representation(board);
     }
 }
 
 class History{
-    List<Board> boards = new ArrayList<>();
+    public List<Representation> boards = new ArrayList<>();
 
-    public void add(Board board) {
+    public void add(Representation board) {
         boards.add(boards.size()+ 1, board);
     }
 
-    public Board getBoardAtMove(int moveIndex){
+    public Representation getBoardAtMove(int moveIndex){
         for(int i = 0; i< boards.size()- moveIndex + 1; i++){
             boards.remove(boards.size()-1);
         }
         return boards.get(moveIndex);
     }
 
-    public Board undoMove(){
+    public Representation undo(){
         if(boards.isEmpty()){
             throw new IllegalStateException();
         }
-        return boards.get(boards.size());
+        return boards.get(boards.size()-1);
     }
+}
+
+class Representation {
+    String reprentation;
+
+    public Representation(TicTacToeBoard board){
+        reprentation = board.toString();
+    }
+
+
 }
