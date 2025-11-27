@@ -7,6 +7,66 @@ import placements.Placements;
 
 import java.util.Optional;
 
+abstract class State{
+    TicTacToeBoard board;
+    Player player;
+
+    public abstract void placeCell();
+    public abstract State next();
+}
+
+class opening extends State{
+
+    @Override
+    public void placeCell() {
+
+    }
+
+    @Override
+    public State next() {
+        return null;
+    }
+}
+
+class midGame extends State{
+
+    @Override
+    public void placeCell() {
+
+    }
+
+    @Override
+    public State next() {
+        return null;
+    }
+}
+
+class TimePressure extends State{
+
+    @Override
+    public void placeCell() {
+
+    }
+
+    @Override
+    public State next() {
+        return null;
+    }
+}
+
+class NoPressure extends State{
+
+    @Override
+    public void placeCell() {
+        
+    }
+
+    @Override
+    public State next() {
+        return null;
+    }
+}
+
 public class AIPlayer {
     public Move suggestMove(Board board, Player player) {
         //Player aiPlayer = new Player("O");
@@ -16,8 +76,10 @@ public class AIPlayer {
             Cell suggestedCell = null;
             if(countMoves(board1) < threshold){
                 suggestedCell = getBasicMove(board1);
-            }else if(countMoves(board1) < threshold + 1){
+            }else if(countMoves(board1) < threshold + 1) {
                 suggestedCell = getSmartMove(player, board1);
+            }else if(player.getUsedTimeInMillis() > 1000){
+                suggestedCell = getBasicMove(board1);
             }else{
                 suggestedCell = getOptimalMove(player, board1);
             }

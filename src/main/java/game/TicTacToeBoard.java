@@ -118,6 +118,16 @@ public class TicTacToeBoard implements CellBoard {
     private Representation getRepresentation(TicTacToeBoard board){
         return new Representation(board);
     }
+
+    public enum Symbol{
+        X("X"), O("O");
+
+        public String marker;
+        Symbol(String marker){
+            this.marker = marker;
+        }
+
+    }
 }
 
 class History{

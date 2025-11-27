@@ -2,8 +2,11 @@ package api;
 
 import board.Board;
 import game.*;
+import placements.DefensivePlacement;
+import placements.OffensivePlacement;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class RuleEngine {
 
@@ -29,46 +32,43 @@ public class RuleEngine {
     }
 
     public GameInfo getInfo(Board board){
-        if(board instanceof TicTacToeBoard board1){
-            GameState gameState = getState(board);
-            String[] players = new String[]{"X", "0"};
-            for(int playerIndex=0; playerIndex<2; playerIndex++){
-                Player currPlayer = new Player(players[playerIndex]);
+        if(board instanceof TicTacToeBoard){
+            TicTacToeBoard ticTacToeBoard = (TicTacToeBoard) board;
+            GameState gameState = getState(ticTacToeBoard);
+            for(TicTacToeBoard.Symbol symbol : TicTacToeBoard.Symbol.values()){
+                Player currPlayer = new Player(symbol.marker);
 
                 for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
                     for (int colIndex = 0; colIndex < 3; colIndex++) {
-                        Board boardCopy = board1.copy();
-                        boolean canStillWin = false;
-                        Cell cell = new Cell(rowIndex, colIndex);
-                        board1.move(new Move(currPlayer, cell));
-                        for(int i=0; i<3; i++){
-                            for(int j=0; j<3; j++){
-                                boardCopy.move(new Move(currPlayer.flip(), new Cell(i, j)));
+                        if(((TicTacToeBoard) board).getSymbol(rowIndex, colIndex) != null ){
+                            TicTacToeBoard ticTacToeBoard1 = ticTacToeBoard.move(new Move( currPlayer, new Cell(rowIndex, colIndex)));
+                            DefensivePlacement defensivePlacement = DefensivePlacement.get();
+                            Optional<Cell> defensivePlace = defensivePlacement.place(ticTacToeBoard1, currPlayer.flip());
 
-                                if(getState(boardCopy).isOver() && getState(boardCopy).getWinner().equals(currPlayer.flip().symbol())){
-                                    canStillWin = true;
-                                    break;
+                            if(defensivePlace.isPresent()){
+                                ticTacToeBoard1.move(new Move( currPlayer.flip(), defensivePlace.get()));
+                                OffensivePlacement offensivePlacement = OffensivePlacement.get();
+                                Optional<Cell> offensivePlace = offensivePlacement.place(ticTacToeBoard1, currPlayer);
+                                if(offensivePlace.isPresent()){
+                                    return new GameInfoBuilder()
+                                            .isOver(getState((ticTacToeBoard1)).isOver())
+                                            .winner(getState(ticTacToeBoard1).getWinner())
+                                            .hasFork(true)
+                                            .player(currPlayer.flip())
+                                            .forkCell(new Cell(rowIndex, colIndex))
+                                            .build();
                                 }
                             }
-                            if(canStillWin) break;
+
                         }
-                        if(!canStillWin){
-                            return new GameInfoBuilder()
-                                    .isOver(getState((boardCopy)).isOver())
-                                    .winner(getState(boardCopy).getWinner())
-                                    .hasFork(true)
-                                    .player(currPlayer.flip())
-                                    .forkCell(cell)
-                                    .build();
-                        }
+
                     }
                 }
             }
-
             return new GameInfoBuilder()
-                    .isOver(getState((board1)).isOver())
-                    .winner(getState(board1).getWinner())
-                    .hasFork(true)
+                    .isOver(getState((ticTacToeBoard)).isOver())
+                    .winner(getState(ticTacToeBoard).getWinner())
+                    .hasFork(false)
                     .player(null)
                     .build();
 
