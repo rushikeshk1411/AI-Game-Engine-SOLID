@@ -1,9 +1,9 @@
 package placements;
 
+import board.TicTacToeBoard;
 import game.*;
 import utils.Util;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class ForkPlacement implements Placements{

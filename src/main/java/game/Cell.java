@@ -1,8 +1,8 @@
 package game;
 
 public class Cell{
-    int rowIndex;
-    int colIndex;
+    public int rowIndex;
+    public int colIndex;
 //    String value;
 
     public Cell(int rowIndex, int colIndex){

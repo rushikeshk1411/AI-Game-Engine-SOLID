@@ -2,7 +2,7 @@ package placements;
 
 import game.Cell;
 import game.Player;
-import game.TicTacToeBoard;
+import board.TicTacToeBoard;
 import utils.Util;
 
 import java.util.Optional;

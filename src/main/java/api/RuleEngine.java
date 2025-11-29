@@ -1,6 +1,7 @@
 package api;
 
 import board.Board;
+import board.TicTacToeBoard;
 import game.*;
 import placements.DefensivePlacement;
 import placements.OffensivePlacement;

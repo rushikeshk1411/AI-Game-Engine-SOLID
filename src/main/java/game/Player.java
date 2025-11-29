@@ -1,9 +1,9 @@
 package game;
 
 public class Player {
-    private User id;
+    private User user;
     private int usedTimeForPlayerInMillis;
-    String playerSymbol;
+    public String playerSymbol;
 
 
     public Player(String symbol){
@@ -25,5 +25,13 @@ public class Player {
 
     public void setTimeUsedForPlayerInMillis(int usedTimeForMove){
         this.usedTimeForPlayerInMillis += usedTimeForMove;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }

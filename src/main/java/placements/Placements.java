@@ -1,6 +1,7 @@
 package placements;
 
 import api.RuleEngine;
+import board.TicTacToeBoard;
 import game.*;
 
 import java.util.Optional;

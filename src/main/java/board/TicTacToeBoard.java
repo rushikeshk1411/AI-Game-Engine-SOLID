@@ -1,6 +1,6 @@
-package game;
+package board;
 
-import board.CellBoard;
+import game.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +134,7 @@ class History{
     public List<Representation> boards = new ArrayList<>();
 
     public void add(Representation board) {
-        boards.add(boards.size()+ 1, board);
+        boards.add(board);
     }
 
     public Representation getBoardAtMove(int moveIndex){
