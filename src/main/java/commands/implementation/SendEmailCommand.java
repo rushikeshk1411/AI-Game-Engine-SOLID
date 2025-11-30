@@ -1,18 +1,17 @@
 package commands.implementation;
 
+import events.Event;
 import game.User;
 
 
 public class SendEmailCommand {
-    public User receiver;
-    public String message;
+    NotificationCommand notificationCommand;
     public String link;
     public String templateId;
     public String templateString;
 
-    public SendEmailCommand(User receiver, String message, String link, String templateId, String templateString){
-        this.receiver = receiver;
-        this.message = message;
+    public SendEmailCommand(Event event){
+        this.notificationCommand = notificationCommand;
         this.link = link;
         this.templateId = templateId;
         this.templateString = templateString;

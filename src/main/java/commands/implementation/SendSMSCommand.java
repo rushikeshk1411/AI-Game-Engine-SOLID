@@ -1,14 +1,19 @@
 package commands.implementation;
 
+import events.Event;
 import game.User;
 
 public class SendSMSCommand {
+    NotificationCommand notificationCommand;
     public User user;
     public String message;
+    public String link;
 
-    public SendSMSCommand(User user, String message){
-        this.user = user;
-        this.message = message;
+    public SendSMSCommand(Event event){
+        this.notificationCommand = notificationCommand;
+        this.link = link;
     }
+
+
 
 }

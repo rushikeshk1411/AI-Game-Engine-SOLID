@@ -4,20 +4,19 @@ import commands.implementation.SendEmailCommand;
 import game.User;
 
 public class SendEmailCommandBuilder {
-    User receiver;
-    String message;
+    NotificationCommandBuilder notificationCommandBuilder;
     String link;
     String templateId;
     String templateString;
 
 
-    public SendEmailCommandBuilder receiver(User receiver){
-        this.receiver = receiver;
+    public SendEmailCommandBuilder user(User user){
+        this.notificationCommandBuilder.user(user);
         return this;
     }
 
     public SendEmailCommandBuilder message(String message){
-        this.message = message;
+        this.notificationCommandBuilder.message(message);
         return this;
     }
 
@@ -37,7 +36,7 @@ public class SendEmailCommandBuilder {
     }
 
     public SendEmailCommand build(){
-        return new SendEmailCommand(receiver, message, link, templateId, templateString);
+        return new SendEmailCommand(notificationCommandBuilder.build(), link, templateId, templateString);
     }
 
 }

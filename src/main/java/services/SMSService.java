@@ -1,6 +1,8 @@
 package services;
 
+import commands.implementation.NotificationCommand;
 import commands.implementation.SendSMSCommand;
+import events.Event;
 import game.User;
 
 public class SMSService {
@@ -9,8 +11,8 @@ public class SMSService {
         //logic to send Email
     }
 
-    public void send(SendSMSCommand smsCommand){
-        execute(smsCommand.user, smsCommand.message);
+    public void send(Event event){
+        execute(event.getNotificationCommand().getUser(), event.getNotificationCommand().getMessage());
     }
 
 }
