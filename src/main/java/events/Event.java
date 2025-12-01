@@ -25,4 +25,5 @@ public abstract class Event {
         return templateString;
     }
 
+    //First three sections are done for this things
 }
