@@ -1,6 +1,7 @@
 package commands.builder;
 
 import commands.implementation.SendEmailCommand;
+import events.Event;
 import game.User;
 
 public class SendEmailCommandBuilder {
@@ -36,7 +37,7 @@ public class SendEmailCommandBuilder {
     }
 
     public SendEmailCommand build(){
-        return new SendEmailCommand(notificationCommandBuilder.build(), link, templateId, templateString);
+        return new SendEmailCommand(notificationCommandBuilder.build());
     }
 
 }

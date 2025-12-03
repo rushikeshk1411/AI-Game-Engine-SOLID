@@ -1,8 +1,9 @@
 package commands.implementation;
 
+import events.Event;
 import game.User;
 
-public class NotificationCommand {
+public class NotificationCommand extends Event {
     User user;
     String message;
 

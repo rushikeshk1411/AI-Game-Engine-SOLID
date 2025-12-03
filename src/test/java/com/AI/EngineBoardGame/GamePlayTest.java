@@ -33,11 +33,11 @@ public class GamePlayTest {
             col = firstPlayerMoves[index][1];
             Player opponent = new Player("X"), computer = new Player("O");
             Move opponentMove = new Move(opponent, new Cell(row, col));
-            gameEngine.move(board, opponentMove);
+            board = gameEngine.move(board, opponentMove);
             row = secondPlayerMoves[index][0];
             col = secondPlayerMoves[index][1];
             Move sugeestMove = new Move(computer, new Cell(row, col));
-            gameEngine.move(board, sugeestMove);
+            board = gameEngine.move(board, sugeestMove);
 
             index++;
         }

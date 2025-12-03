@@ -8,6 +8,7 @@ public class Player {
 
     public Player(String symbol){
         this.playerSymbol = symbol;
+        user = new User(Double.toString(Math.random()));
     }
 
     public String symbol(){

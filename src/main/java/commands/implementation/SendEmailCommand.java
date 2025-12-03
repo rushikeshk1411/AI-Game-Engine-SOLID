@@ -11,10 +11,10 @@ public class SendEmailCommand {
     public String templateString;
 
     public SendEmailCommand(Event event){
-        this.notificationCommand = notificationCommand;
-        this.link = link;
-        this.templateId = templateId;
-        this.templateString = templateString;
+        this.notificationCommand = event.getNotificationCommand();
+        this.link = event.getLink();
+        this.templateId = event.getTemplateId();
+        this.templateString = event.getTemplateString();
     }
 
 }

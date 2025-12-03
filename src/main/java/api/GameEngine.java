@@ -15,9 +15,9 @@ public class GameEngine {
 		}
 	}
 
-	public void move(Board board, Move move) {
+	public Board move(Board board, Move move) {
 		if(board instanceof TicTacToeBoard){
-			((TicTacToeBoard) board).move(move);
+			return ((TicTacToeBoard) board).move(move);
 		}else{
 			throw new IllegalArgumentException();
 		}

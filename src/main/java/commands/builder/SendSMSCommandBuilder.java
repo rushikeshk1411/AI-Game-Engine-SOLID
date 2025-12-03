@@ -20,6 +20,6 @@ public class SendSMSCommandBuilder {
     }
 
     public SendSMSCommand build(){
-        return new SendSMSCommand(notificationCommandBuilder.build(), link);
+        return new SendSMSCommand(notificationCommandBuilder.build());
     }
 }
